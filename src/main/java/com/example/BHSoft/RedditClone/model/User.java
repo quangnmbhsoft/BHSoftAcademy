@@ -25,7 +25,4 @@ public class User {
     private String email;
     private Instant created;
     private boolean enabled;
-
-    public User(String username, String password, String email, Instant created, boolean enabled) {
-    }
 }

@@ -1,2 +1,0 @@
-# BHSoftAcademy
-Reddit Clone 
