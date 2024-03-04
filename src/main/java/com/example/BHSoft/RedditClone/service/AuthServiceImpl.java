@@ -7,6 +7,7 @@ import com.example.BHSoft.RedditClone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,18 +39,19 @@ public class AuthServiceImpl implements AuthService {
         userDTO.setEmail(createdUser.getEmail());
         userDTO.setCreated(createdUser.getCreated());
         userDTO.setEnabled(createdUser.isEnabled());
-
         return userDTO;
 
     }
 
     @Override
     public User getCurrentUser() {
-        Authentication principal = (Authentication) SecurityContextHolder.
+        Authentication principal = SecurityContextHolder.
                 getContext().getAuthentication();
-        return userRepository.findByUsername(principal.getPrincipal().toString())
-                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getPrincipal().toString()));
+        UserDetails userDetails = (UserDetails) principal.getPrincipal();
+
+        return userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + userDetails.getUsername()));
     }
-         //
-    }
+
+}
 
