@@ -6,9 +6,9 @@ import com.example.BHSoft.RedditClone.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 public class SignupUserController {
@@ -17,9 +17,15 @@ public class SignupUserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody SignupRequest signupRequest) {
-        UserDTO createdUser = authService.createUser(signupRequest);
-        if (createdUser == null)
-            return new ResponseEntity<>("User is not created, try again later.", HttpStatus.BAD_REQUEST);
+        authService.createUser(signupRequest);
+//        if (createdUser == null)
+//            return new ResponseEntity<>("User is not created, try again later.", HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>("createdUser", HttpStatus.CREATED);
+    }
+
+    @GetMapping("accountVerification/{token}")
+    public ResponseEntity<String> verifyAccount(@PathVariable String token) {
+        authService.verifyAccount(token);
+        return new ResponseEntity<>("Account Activated Successfully", OK);
     }
 }

@@ -1,12 +1,9 @@
 package com.example.BHSoft.RedditClone.mapper;
 
+import com.example.BHSoft.RedditClone.model.*;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.example.BHSoft.RedditClone.dto.PostRequest;
 import com.example.BHSoft.RedditClone.dto.PostResponse;
-import com.example.BHSoft.RedditClone.model.Post;
-import com.example.BHSoft.RedditClone.model.Subreddit;
-import com.example.BHSoft.RedditClone.model.User;
-import com.example.BHSoft.RedditClone.model.VoteType;
 import com.example.BHSoft.RedditClone.repository.CommentRepository;
 import com.example.BHSoft.RedditClone.repository.VoteRepository;
 import com.example.BHSoft.RedditClone.service.AuthService;
@@ -31,6 +28,7 @@ public abstract class PostMapper {
     @Mapping(target = "description", source = "postRequest.description")
     @Mapping(target = "subreddit", source = "subreddit")
     @Mapping(target = "voteCount", constant = "0")
+    @Mapping(target = "user", source = "user")
     public abstract Post map(PostRequest postRequest, Subreddit subreddit, User user);
 
     @Mapping(target = "id", source = "postId")
@@ -38,6 +36,8 @@ public abstract class PostMapper {
     @Mapping(target = "userName", source = "user.username")
     @Mapping(target = "commentCount", expression = "java(commentCount(post))")
     @Mapping(target = "duration", expression = "java(getDuration(post))")
+    @Mapping(target = "upVote", expression = "java(isPostUpVoted(post))")
+    @Mapping(target = "downVote", expression = "java(isPostDownVoted(post))")
     public abstract PostResponse mapToDTO(Post post);
 
     Integer commentCount(Post post) {
@@ -48,23 +48,23 @@ public abstract class PostMapper {
         return TimeAgo.using(post.getCreatedDate().toEpochMilli());
     }
 
-//    boolean isPostUpVoted(Post post) {
-//        return checkVoteType(post, UPVOTE);
-//    }
-//
-//    boolean isPostDownVoted(Post post) {
-//        return checkVoteType(post, DOWNVOTE);
-//    }
-//
-//    private boolean checkVoteType(Post post, VoteType voteType) {
-//        if (authService.isLoggedIn()) {
-//            Optional<Vote> voteForPostByUser =
-//                    voteRepository.findTopByPostAndUserOrderByVoteIdDesc(post,
-//                            authService.getCurrentUser());
-//            return voteForPostByUser.filter(vote -> vote.getVoteType().equals(voteType))
-//                    .isPresent();
-//        }
-//        return false;
-//    }
+    boolean isPostUpVoted(Post post) {
+        return checkVoteType(post, UPVOTE);
+    }
+
+    boolean isPostDownVoted(Post post) {
+        return checkVoteType(post, DOWNVOTE);
+    }
+
+    private boolean checkVoteType(Post post, VoteType voteType) {
+        if (authService.isLoggedIn()) {
+            Optional<Vote> voteForPostByUser =
+                    voteRepository.findTopByPostAndUserOrderByVoteIdDesc(post,
+                            authService.getCurrentUser());
+            return voteForPostByUser.filter(vote -> vote.getVoteType().equals(voteType))
+                    .isPresent();
+        }
+        return false;
+    }
 
 }
