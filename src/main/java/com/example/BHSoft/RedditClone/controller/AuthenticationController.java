@@ -33,14 +33,14 @@ public class AuthenticationController {
     @PostMapping("/login")
     public AuthenticationResponse login(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Incorrect Username or password.");
         } catch (DisabledException disabledException) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "User is not created. Register User first.");
 
         }
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
         return new AuthenticationResponse(jwt);
     }

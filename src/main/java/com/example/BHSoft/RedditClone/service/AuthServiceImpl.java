@@ -5,14 +5,16 @@ import com.example.BHSoft.RedditClone.dto.UserDTO;
 import com.example.BHSoft.RedditClone.model.User;
 import com.example.BHSoft.RedditClone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.time.Instant;
+import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -42,13 +44,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public User getCurrentUser() {
-        Jwt principal = (Jwt) SecurityContextHolder.
-                getContext().getAuthentication().getPrincipal();
-        return userRepository.findByUsername(principal.getSubject())
-                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getSubject()));
-        }
+        Authentication principal = (Authentication) SecurityContextHolder.
+                getContext().getAuthentication();
+        return userRepository.findByUsername(principal.getPrincipal().toString())
+                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getPrincipal().toString()));
+    }
          //
     }
 

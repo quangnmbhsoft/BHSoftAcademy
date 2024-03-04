@@ -71,7 +71,8 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<PostResponse> getPostsByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
         return postRepository.findByUser(user)
                 .stream()
                 .map(postMapper::mapToDTO)
