@@ -43,27 +43,6 @@ public class AuthenticationController {
     private AuthService authService;
 
 
-//    @PostMapping("/login")
-//    public AuthenticationResponse login(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException {
-//        String token = null;
-//        try {
-//            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//            token = jwtUtil.generateToken(authentication.toString());
-//        } catch (BadCredentialsException e) {
-//            throw new BadCredentialsException("Incorrect Username or password.");
-//        } catch (DisabledException disabledException) {
-//            response.sendError(HttpServletResponse.SC_NOT_FOUND, "User is not created. Register User first.");
-//
-//        }
-//        return AuthenticationResponse.builder()
-//                .authenticationToken(token)
-//                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
-//                .expiresAt(Instant.now().plusMillis(1000 * 60 * 30))
-//                .username(authenticationRequest.getUsername())
-//                .build();
-//    }
-
     @PostMapping("/login")
     public AuthenticationResponse login(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException {
         try {
@@ -84,7 +63,7 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostMapping("refresh/token")
+    @PostMapping("/refresh-token")
     public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         return authService.refreshToken(refreshTokenRequest);
     }

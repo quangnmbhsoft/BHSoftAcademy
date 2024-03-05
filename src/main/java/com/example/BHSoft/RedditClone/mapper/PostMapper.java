@@ -11,6 +11,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static com.example.BHSoft.RedditClone.model.VoteType.DOWNVOTE;
@@ -45,7 +46,15 @@ public abstract class PostMapper {
     }
 
     String getDuration(Post post) {
-        return TimeAgo.using(post.getCreatedDate().toEpochMilli());
+        long duration1 = Instant.now().getEpochSecond() ;
+        long duration2 = post.getCreatedDate().getEpochSecond();
+        duration1 = (duration1 - duration2)/86400;
+        if (duration1 > 1) {
+            return duration1 + " days ago";
+        } else {
+            return duration1 + " day ago";
+        }
+
     }
 
     boolean isPostUpVoted(Post post) {

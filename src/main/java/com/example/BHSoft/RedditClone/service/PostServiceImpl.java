@@ -41,8 +41,7 @@ public class PostServiceImpl implements PostService{
         Subreddit subreddit = subredditRepository.findByName(postRequest.getSubredditName())
                 .orElseThrow(() -> new RuntimeException(postRequest.getSubredditName()));
         User currentUser = authService.getCurrentUser();
-        postMapper.map(postRequest, subreddit, currentUser);
-
+        postRepository.save(postMapper.map(postRequest, subreddit, authService.getCurrentUser()));
 
     }
 

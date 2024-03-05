@@ -27,8 +27,8 @@ public class CommentController {
     }
 
     @GetMapping(params = "postId")
-    public void getAllCommentsForPost(@PathVariable Long postId) {
-        ResponseEntity.status(HttpStatus.OK)
+    public ResponseEntity<List<CommentDTO>> getAllCommentsForPost(@RequestParam Long postId) {
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(commentService.getAllCommentsForPost(postId));
     }
 

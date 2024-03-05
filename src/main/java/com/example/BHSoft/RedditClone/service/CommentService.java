@@ -8,7 +8,7 @@ public interface CommentService {
 
     void save(CommentDTO commentDTO);
 
-    Object getAllCommentsForPost(Long postId);
+    List<CommentDTO> getAllCommentsForPost(Long postId);
 
     List<CommentDTO> getAllCommentsForUser(String userName);
 }
