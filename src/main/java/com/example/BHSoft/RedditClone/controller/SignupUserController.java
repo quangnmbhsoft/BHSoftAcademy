@@ -20,7 +20,7 @@ public class SignupUserController {
         authService.createUser(signupRequest);
 //        if (createdUser == null)
 //            return new ResponseEntity<>("User is not created, try again later.", HttpStatus.BAD_REQUEST);
-        return new ResponseEntity<>("createdUser", HttpStatus.CREATED);
+        return new ResponseEntity<>("Account created successfully, please activate account", HttpStatus.CREATED);
     }
 
     @GetMapping("accountVerification/{token}")
