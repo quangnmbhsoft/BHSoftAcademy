@@ -10,6 +10,7 @@ import com.example.BHSoft.RedditClone.repository.UserRepository;
 import com.example.BHSoft.RedditClone.repository.VerificationTokenRepository;
 import com.example.BHSoft.RedditClone.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -89,7 +90,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean isLoggedIn() {
-        return false;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 
     @Override
