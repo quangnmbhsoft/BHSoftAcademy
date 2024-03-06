@@ -3,6 +3,7 @@ package com.example.BHSoft.RedditClone.controller;
 import com.example.BHSoft.RedditClone.dto.CommentDTO;
 import com.example.BHSoft.RedditClone.service.CommentService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,9 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<Void> createComment(@RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<String> createComment(@RequestBody CommentDTO commentDTO) {
         commentService.save(commentDTO);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Created Comment");
     }
 
     @GetMapping(params = "postId")

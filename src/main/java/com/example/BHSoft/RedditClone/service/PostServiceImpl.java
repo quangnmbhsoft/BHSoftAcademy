@@ -37,12 +37,13 @@ public class PostServiceImpl implements PostService{
     private PostRepository postRepository;
 
     @Override
-    public void save(PostRequest postRequest) {
+    public PostRequest save(PostRequest postRequest) {
         Subreddit subreddit = subredditRepository.findByName(postRequest.getSubredditName())
                 .orElseThrow(() -> new RuntimeException(postRequest.getSubredditName()));
         User currentUser = authService.getCurrentUser();
         postRepository.save(postMapper.map(postRequest, subreddit, authService.getCurrentUser()));
-
+        postRequest.setPostId(currentUser.getUserId());
+        return postRequest;
     }
 
     @Override

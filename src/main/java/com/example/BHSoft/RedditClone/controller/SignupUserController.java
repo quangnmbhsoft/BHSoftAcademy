@@ -18,12 +18,10 @@ public class SignupUserController {
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody SignupRequest signupRequest) {
         authService.createUser(signupRequest);
-//        if (createdUser == null)
-//            return new ResponseEntity<>("User is not created, try again later.", HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>("Account created successfully, please activate account", HttpStatus.CREATED);
     }
 
-    @GetMapping("accountVerification/{token}")
+    @GetMapping("/accountVerification/{token}")
     public ResponseEntity<String> verifyAccount(@PathVariable String token) {
         authService.verifyAccount(token);
         return new ResponseEntity<>("Account Activated Successfully", OK);

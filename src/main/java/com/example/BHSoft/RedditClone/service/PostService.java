@@ -6,7 +6,7 @@ import com.example.BHSoft.RedditClone.dto.PostResponse;
 import java.util.List;
 
 public interface PostService {
-    void save(PostRequest postRequest);
+    PostRequest save(PostRequest postRequest);
 
     List<PostResponse> getAllPosts();
 
